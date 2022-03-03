@@ -52,8 +52,6 @@ int main(int argc, char** argv) {
     uint32_t offset = sizeof(struct mach_header_64);
     raddr = buffer + offset;
 
-int ngrokHack;
-
     for (int i = 0; i < m_header->ncmds; i++) {
         struct load_command *lc = (struct load_command*) raddr;
         if (lc->cmd == LC_SEGMENT_64) {
