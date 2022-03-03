@@ -12,7 +12,7 @@ This can be done directly on a jailbroken iOS environment. You need to find and 
 - Install required tools (`clang`, `Darwin CC Tools`, `git`, `ldid`, `build-essential`). One-line command: `sudo apt install -y build-essential clang git ldid odcctools`.
 - Place `ngrok` into `/usr/bin/ngrok_bin`.
  
-```
+```bash
 # Clone this repository
 git clone https://github.com/khanhduytran0/ngrok4ios
 cd ngrok4ios
