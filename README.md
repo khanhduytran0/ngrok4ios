@@ -23,14 +23,17 @@ export SDK=/usr/share/SDKs/iPhoneOS.sdk
 # Jump to root, this is required for doing ngrok modifications in /usr
 su
 
+# Change frameworks path
+install_name_tool -change /System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation /System/Library/Frameworks/CoreFoundation.framework/CoreFoundation -change /System/Library/Frameworks/Security.framework/Versions/A/Security /usr/lib/libngrokhelper.dylib /usr/bin/ngrok_bin
+
 # Give 32 bytes for adding LD_BUILD_VERSION load command. See patcher.c for more info. i'm lazy to programmatically change offset stuff:)
 install_name_tool -add_rpath /just/testing /usr/bin/ngrok_bin
 
 # Build and install the helper library
-clang -isysroot $SDK stubs.c -o /usr/lib/libngrokhelper.dylib -dynamiclib
+clang -isysroot $SDK stubs.c -o /usr/lib/libngrokhelper.dylib -dynamiclib -framework Security
 
 # Build and install the patcher to /usr/bin
-sudo clang -isysroot $SDK patcher.c -o /usr/bin/ngrokpatcher
+clang -isysroot $SDK patcher.c -o /usr/bin/ngrokpatcher
 
 # Patch ngrok
 ngrokpatcher /usr/bin/ngrok_bin
@@ -39,7 +42,7 @@ ngrokpatcher /usr/bin/ngrok_bin
 ldid -S /usr/bin/ngrok_bin
 
 # Create a wrapper script
-echo "DYLD_FORCE_FLAT_NAMESPACE=1 DYLD_INSERT_LIBRARIES=/usr/lib/libngrokhelper.dylib ngrok_bin" > /usr/bin/ngrok
+echo "DYLD_FORCE_FLAT_NAMESPACE=1 ngrok_bin" > /usr/bin/ngrok
 
 # Give executable permission
 chmod +x /usr/bin/ngrok_bin /usr/bin/ngrok
