@@ -42,7 +42,7 @@ ngrokpatcher /usr/bin/ngrok_bin
 ldid -S /usr/bin/ngrok_bin
 
 # Create a wrapper script
-echo "DYLD_FORCE_FLAT_NAMESPACE=1 ngrok_bin" > /usr/bin/ngrok
+echo "DYLD_FORCE_FLAT_NAMESPACE=1 ngrok_bin \$@" > /usr/bin/ngrok
 
 # Give executable permission
 chmod +x /usr/bin/ngrok_bin /usr/bin/ngrok
