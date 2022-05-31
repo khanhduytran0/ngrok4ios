@@ -63,6 +63,10 @@ int main(int argc, char** argv) {
                     segCmd->flags |= SG_NORELOC;
                 }
             }
+        } else if (lc->cmd == LC_BUILD_VERSION) {
+            printf("Found LC_BUILD_VERSION, modifying the load command\n");
+            struct build_version_command *lc_buildver = (struct build_version_command *)lc;
+            lc_buildver->platform = 0x2; // set to iOS
         } else if (lc->cmd == LC_RPATH && lc->cmdsize == 32) {
             printf("Found space for LC_BUILD_VERSION, adding the load command\n");
 

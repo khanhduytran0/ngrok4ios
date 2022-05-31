@@ -26,9 +26,6 @@ su
 # Change frameworks path
 install_name_tool -change /System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation /System/Library/Frameworks/CoreFoundation.framework/CoreFoundation -change /System/Library/Frameworks/Security.framework/Versions/A/Security /usr/lib/libngrokhelper.dylib /usr/bin/ngrok_bin
 
-# Give 32 bytes for adding LD_BUILD_VERSION load command. See patcher.c for more info. i'm lazy to programmatically change offset stuff:)
-install_name_tool -add_rpath /just/testing /usr/bin/ngrok_bin
-
 # Build and install the helper library
 clang -isysroot $SDK stubs.c -o /usr/lib/libngrokhelper.dylib -dynamiclib -framework Security
 
@@ -39,7 +36,7 @@ clang -isysroot $SDK patcher.c -o /usr/bin/ngrokpatcher
 ngrokpatcher /usr/bin/ngrok_bin
 
 # Sign ngrok
-ldid -S /usr/bin/ngrok_bin
+ldid -Sent.xml /usr/bin/ngrok_bin
 
 # Create a wrapper script
 echo "DYLD_FORCE_FLAT_NAMESPACE=1 ngrok_bin \$@" > /usr/bin/ngrok
